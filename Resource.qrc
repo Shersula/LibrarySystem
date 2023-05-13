@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>res/img/bg.png</file>
+        <file>res/img/icons/ExitIco.png</file>
+        <file>res/img/icons/InfoIco.png</file>
+        <file>res/img/icons/BookListIco.png</file>
+        <file>res/img/icons/GiveBookIco.png</file>
+        <file>res/img/icons/TicketIco.png</file>
     </qresource>
 </RCC>
