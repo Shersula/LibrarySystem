@@ -33,5 +33,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void ClearWindow(QWidget* area);
 };
 #endif // MAINWINDOW_H

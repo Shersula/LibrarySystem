@@ -33,6 +33,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::ClearWindow(QWidget* area)
+{
+    delete area->layout();
+    QList<QWidget*> ChildList = area->findChildren<QWidget*>();
+    foreach (QWidget* i, ChildList)
+    {
+        delete i;
+    }
+}
+
 void MainWindow::on_BookGiveBtn_clicked()
 {
     if(ui->MainWidget->currentWidget() == ui->ClearPage)
@@ -49,12 +59,7 @@ void MainWindow::on_BookGiveBtn_clicked()
     }
     else
     {
-        delete ui->scrollAreaWidgetContents->layout();
-        QList<QWidget*> ChildList = ui->scrollAreaWidgetContents->findChildren<QWidget*>();
-        foreach (QWidget* i, ChildList)
-        {
-            delete i;
-        }
+        ClearWindow(ui->scrollAreaWidgetContents);
 
         ui->MainWidget->setCurrentWidget(ui->ClearPage);
     }
@@ -69,12 +74,7 @@ void MainWindow::on_OkBtn_clicked()
 
 void MainWindow::on_SearchBtn_clicked()
 {
-    delete ui->scrollAreaWidgetContents->layout();
-    QList<QWidget*> ChildList = ui->scrollAreaWidgetContents->findChildren<QWidget*>();
-    foreach (QWidget* i, ChildList)
-    {
-        delete i;
-    }
+    ClearWindow(ui->scrollAreaWidgetContents);
 
     QString Search = ui->SearchLine->text();
     if(Search.length() == 0)
@@ -95,12 +95,7 @@ void MainWindow::on_SearchBtn_clicked()
 
 void MainWindow::on_HomeBtn_clicked()
 {
-    delete ui->scrollAreaWidgetContents->layout();
-    QList<QWidget*> ChildList = ui->scrollAreaWidgetContents->findChildren<QWidget*>();
-    foreach (QWidget* i, ChildList)
-    {
-        delete i;
-    }
+    ClearWindow(ui->scrollAreaWidgetContents);
 
     ui->MainWidget->setCurrentWidget(ui->ClearPage);
 }
