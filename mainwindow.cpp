@@ -134,6 +134,7 @@ void MainWindow::on_SearchBtn_clicked()
         QSqlQuery query(DB);
         query.exec("SELECT * FROM books WHERE Name LIKE '"+Search+"%' OR Author LIKE '"+Search+"%'");
         DrowBook(&query);
+        ui->SearchLine->setText("");
     }
 
 }
