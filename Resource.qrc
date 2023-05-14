@@ -9,5 +9,6 @@
         <file>res/img/icons/SearchIco.png</file>
         <file>res/img/icons/HomeIcon.png</file>
         <file>res/img/icons/OKIcon.png</file>
+        <file>res/img/icons/LogInIco.png</file>
     </qresource>
 </RCC>

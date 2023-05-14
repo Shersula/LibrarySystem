@@ -12,7 +12,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    ui->MainWidget->setCurrentWidget(ui->ClearPage);
+    ui->MainWidget->setCurrentWidget(ui->AuthorizedPage);
+    ui->LogInMsg->hide();
+    ui->Button_Group->hide();
+    ui->TicketInput->setInputMask("99-999-999");
+    ui->TicketInput->setCursorPosition(0);
 
     DB.setHostName("triniti.ru-hoster.com");
     DB.setDatabaseName("rootYJk");
@@ -72,7 +76,6 @@ void MainWindow::DrowBook(QSqlQuery* query)
 
         QCheckBox* Status = new QCheckBox;
         MainGrid->addWidget(Status, row, 2);
-
     }
 }
 
@@ -129,7 +132,7 @@ void MainWindow::on_SearchBtn_clicked()
     else
     {
         QSqlQuery query(DB);
-        query.exec("SELECT * FROM books WHERE Name='"+Search+"' OR Author='"+Search+"'");
+        query.exec("SELECT * FROM books WHERE Name LIKE '"+Search+"%' OR Author LIKE '"+Search+"%'");
         DrowBook(&query);
     }
 
@@ -145,5 +148,44 @@ void MainWindow::on_HomeBtn_clicked()
     }
 
     ui->MainWidget->setCurrentWidget(ui->ClearPage);
+}
+
+
+void MainWindow::on_LogInBtn_clicked()
+{
+    if(ui->TicketInput->text() == "--")
+    {
+        ui->LogInText->setText("Ошибка: Вы не ввели номер билета");
+        ui->LogInMsg->show();
+        return void();
+    }
+    else if(ui->PasswordInput->text().isEmpty())
+    {
+        ui->LogInText->setText("Ошибка: Вы не ввели пароль");
+        ui->LogInMsg->show();
+        return void();
+    }
+
+    QSqlQuery query(DB);
+    query.exec("SELECT * FROM tickets WHERE TicketNumber='" + ui->TicketInput->text() + "' AND Password='" + ui->PasswordInput->text() + "'");
+
+    if(query.next() == false)
+    {
+        ui->LogInText->setText("Ошибка: Не верный номер билета или пароль");
+        ui->LogInMsg->show();
+    }
+    else
+    {
+        ui->MainWidget->setCurrentWidget(ui->ClearPage);
+        ui->Button_Group->show();
+    }
+}
+
+
+void MainWindow::on_Exit_clicked()
+{
+    ui->MainWidget->setCurrentWidget(ui->AuthorizedPage);
+    ui->LogInMsg->hide();
+    ui->Button_Group->hide();
 }
 

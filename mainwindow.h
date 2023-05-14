@@ -25,6 +25,10 @@ private slots:
 
     void on_HomeBtn_clicked();
 
+    void on_LogInBtn_clicked();
+
+    void on_Exit_clicked();
+
 private:
     Ui::MainWindow *ui;
     void DrowBook(QSqlQuery* query);
