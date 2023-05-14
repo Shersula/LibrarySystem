@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    ui->MainSubWindow->hide(); //Прячем доп.окно
+    ui->MainWidget->setCurrentWidget(ui->ClearPage);
 
     DB.setHostName("triniti.ru-hoster.com");
     DB.setDatabaseName("rootYJk");
@@ -28,15 +28,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-enum SubWindowType
-{
-    None = 0,
-    GiveBook,
-    GiveTicket,
-    BookList,
-    Info
-};
 
 void MainWindow::DrowBook(QSqlQuery* query)
 {
@@ -87,10 +78,9 @@ void MainWindow::DrowBook(QSqlQuery* query)
 
 void MainWindow::on_BookGiveBtn_clicked()
 {
-    if(ui->MainSubWindow->property("Status") == SubWindowType::None)
+    if(ui->MainWidget->currentWidget() == ui->ClearPage)
     {
-        ui->MainSubWindow->show();
-        ui->MainSubWindow->setProperty("Status", SubWindowType::GiveBook);
+        ui->MainWidget->setCurrentWidget(ui->GiveBookPage);
 
         ui->TitleText->setText("Выдача книги [1/2]");
 
@@ -102,16 +92,21 @@ void MainWindow::on_BookGiveBtn_clicked()
     }
     else
     {
-        ui->MainSubWindow->hide();
-        ui->MainSubWindow->setProperty("Status", SubWindowType::None);
+        delete ui->scrollAreaWidgetContents->layout();
+        QList<QWidget*> ChildList = ui->scrollAreaWidgetContents->findChildren<QWidget*>();
+        foreach (QWidget* i, ChildList)
+        {
+            delete i;
+        }
+
+        ui->MainWidget->setCurrentWidget(ui->ClearPage);
     }
 }
 
 
 void MainWindow::on_OkBtn_clicked()
 {
-    ui->MainSubWindow->hide();
-    ui->MainSubWindow->setProperty("Status", SubWindowType::None);
+
 }
 
 
@@ -141,4 +136,15 @@ void MainWindow::on_SearchBtn_clicked()
 
 }
 
+void MainWindow::on_HomeBtn_clicked()
+{
+    delete ui->scrollAreaWidgetContents->layout();
+    QList<QWidget*> ChildList = ui->scrollAreaWidgetContents->findChildren<QWidget*>();
+    foreach (QWidget* i, ChildList)
+    {
+        delete i;
+    }
+
+    ui->MainWidget->setCurrentWidget(ui->ClearPage);
+}
 
