@@ -18,6 +18,8 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        pagefunction.cpp
+        pagefunction.h
         Resource.qrc
 )
 

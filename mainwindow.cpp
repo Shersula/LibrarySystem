@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
 
     ui->MainWidget->setCurrentWidget(ui->ClearPage);
-
     DB.setHostName("triniti.ru-hoster.com");
     DB.setDatabaseName("rootYJk");
     DB.setUserName("rootYJk");
