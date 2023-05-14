@@ -33,6 +33,5 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    void DrowBook(QSqlQuery* query);
 };
 #endif // MAINWINDOW_H
