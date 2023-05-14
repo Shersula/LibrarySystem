@@ -23,6 +23,8 @@ private slots:
 
     void on_SearchBtn_clicked();
 
+    void on_HomeBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     void DrowBook(QSqlQuery* query);
