@@ -6,5 +6,8 @@
         <file>res/img/icons/BookListIco.png</file>
         <file>res/img/icons/GiveBookIco.png</file>
         <file>res/img/icons/TicketIco.png</file>
+        <file>res/img/icons/SearchIco.png</file>
+        <file>res/img/icons/HomeIcon.png</file>
+        <file>res/img/icons/OKIcon.png</file>
     </qresource>
 </RCC>

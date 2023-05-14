@@ -15,6 +15,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_BookGiveBtn_clicked();
+
+    void on_OkBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
