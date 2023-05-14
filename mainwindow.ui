@@ -211,6 +211,9 @@ color: #686060;
                 </item>
                 <item>
                  <widget class="QPushButton" name="SearchBtn">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">border: unset;</string>
                   </property>
@@ -264,7 +267,7 @@ border: unset;</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>767</width>
+                   <width>751</width>
                    <height>280</height>
                   </rect>
                  </property>
@@ -302,12 +305,28 @@ border: unset;</string>
                     <height>52</height>
                    </size>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(135, 156, 207);
-border-color: rgb(0, 0, 0);
-border: solid;
-border-width: 2px;
-border-radius: 15px;</string>
+                   <string notr="true">#HomeBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#HomeBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#HomeBtn:pressed
+{
+    border: unset;
+}</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -360,12 +379,28 @@ border-radius: 15px;</string>
                     <height>52</height>
                    </size>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(135, 156, 207);
-border-color: rgb(0, 0, 0);
-border: solid;
-border-width: 2px;
-border-radius: 15px;</string>
+                   <string notr="true">#OkBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#OkBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#OkBtn:pressed
+{
+    border: unset;
+}</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -390,245 +425,845 @@ border-radius: 15px;</string>
           </layout>
          </widget>
          <widget class="QWidget" name="AuthorizedPage">
-          <layout class="QVBoxLayout" name="verticalLayout_5"/>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>300</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QWidget" name="TicketNumber" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QWidget" name="TicketLabel" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>204</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>204</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(223, 237, 255);
+border-radius: 5px;</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>9</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="TicketText">
+                   <property name="styleSheet">
+                    <string notr="true">font-family: 'Acme';
+font-size: 20px;
+color: #000000;
+
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Номер билета:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="TicketInput">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>384</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>384</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(152, 163, 190);
+border-radius: 10px;
+
+font-family: 'Acme';
+font-size: 20px;
+color: #737373;
+
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="maxLength">
+                 <number>32767</number>
+                </property>
+                <property name="placeholderText">
+                 <string>Введите номер билета</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="Password" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QWidget" name="PasswordLabel" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>204</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>204</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(223, 237, 255);
+border-radius: 5px;</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_7">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>9</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>9</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="PasswordText">
+                   <property name="styleSheet">
+                    <string notr="true">font-family: 'Acme';
+font-size: 20px;
+color: #000000;
+
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Пароль:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="PasswordInput">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>384</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>384</width>
+                  <height>47</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(152, 163, 190);
+border-radius: 10px;
+
+font-family: 'Acme';
+font-size: 20px;
+color: #737373;
+
+</string>
+                </property>
+                <property name="echoMode">
+                 <enum>QLineEdit::Password</enum>
+                </property>
+                <property name="placeholderText">
+                 <string>Введите пароль</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="LogIn" native="true">
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QWidget" name="LogInMsg" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>516</width>
+                  <height>52</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>516</width>
+                  <height>52</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(223, 237, 255);
+border-radius: 5px;</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_8">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="LogInText">
+                   <property name="styleSheet">
+                    <string notr="true">font-family: 'Acme';
+font-size: 20px;
+color: #CC5072;
+
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Ошибка: Не верный номер билета или пароль</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="LogInBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>52</width>
+                  <height>52</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>52</width>
+                  <height>52</height>
+                 </size>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">#LogInBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#LogInBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#LogInBtn:pressed
+{
+    border: unset;
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/res/img/icons/LogInIco.png</normalon>
+                 </iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_9">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>300</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="Button_Group">
-         <property name="spacing">
-          <number>5</number>
+        <widget class="QWidget" name="Button_Group" native="true">
+         <property name="styleSheet">
+          <string notr="true"/>
          </property>
-         <property name="topMargin">
-          <number>10</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="BookGiveBtn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(135, 156, 207);
-border-color: rgb(0, 0, 0);
-border: solid;
-border-width: 2px;
-border-radius: 15px;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="Resource.qrc">
-             <normaloff>:/res/img/icons/GiveBookIco.png</normaloff>:/res/img/icons/GiveBookIco.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>48</width>
-             <height>48</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="TicketGiveBtn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(135, 156, 207);
-border-color: rgb(0, 0, 0);
-border: solid;
-border-width: 2px;
-border-radius: 15px;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="Resource.qrc">
-             <normaloff>:/res/img/icons/TicketIco.png</normaloff>:/res/img/icons/TicketIco.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="BookListBtn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(135, 156, 207);
-border-color: rgb(0, 0, 0);
-border: solid;
-border-width: 2px;
-border-radius: 15px;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="Resource.qrc">
-             <normaloff>:/res/img/icons/BookListIco.png</normaloff>:/res/img/icons/BookListIco.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>48</width>
-             <height>48</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="InfoBtn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(135, 156, 207);
-border-color: rgb(0, 0, 0);
-border: solid;
-border-width: 2px;
-border-radius: 15px;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="Resource.qrc">
-             <normaloff>:/res/img/icons/InfoIco.png</normaloff>:/res/img/icons/InfoIco.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>48</width>
-             <height>48</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>300</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="Exit">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>52</width>
-             <height>52</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(152, 163, 190);
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="BookGiveBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#BookGiveBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#BookGiveBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#BookGiveBtn:pressed
+{
+    border: unset;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="Resource.qrc">
+              <normaloff>:/res/img/icons/GiveBookIco.png</normaloff>:/res/img/icons/GiveBookIco.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>48</width>
+              <height>48</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="TicketGiveBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#TicketGiveBtn
+{
+background-color: rgb(135, 156, 207);
 border-color: rgb(0, 0, 0);
 border: solid;
 border-width: 2px;
 border-radius: 15px;
+}
+
+#TicketGiveBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#TicketGiveBtn:pressed
+{
+    border: unset;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="Resource.qrc">
+              <normaloff>:/res/img/icons/TicketIco.png</normaloff>:/res/img/icons/TicketIco.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="BookListBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#BookListBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#BookListBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#BookListBtn:pressed
+{
+    border: unset;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="Resource.qrc">
+              <normaloff>:/res/img/icons/BookListIco.png</normaloff>:/res/img/icons/BookListIco.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>48</width>
+              <height>48</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="InfoBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#InfoBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#InfoBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#InfoBtn:pressed
+{
+    border: unset;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="Resource.qrc">
+              <normaloff>:/res/img/icons/InfoIco.png</normaloff>:/res/img/icons/InfoIco.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>48</width>
+              <height>48</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>300</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Exit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>52</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#Exit
+{
+	background-color: rgb(152, 163, 190);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#Exit:hover
+{
+	background-color: rgb(97, 104, 121);
+}
+
+#Exit:pressed
+{
+    border: unset;
+}
 
 </string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normalon>:/res/img/icons/ExitIco.png</normalon>
-            </iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normalon>:/res/img/icons/ExitIco.png</normalon>
+             </iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
