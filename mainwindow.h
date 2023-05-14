@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlQuery>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,7 +21,10 @@ private slots:
 
     void on_OkBtn_clicked();
 
+    void on_SearchBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
+    void DrowBook(QSqlQuery* query);
 };
 #endif // MAINWINDOW_H
