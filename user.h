@@ -6,11 +6,13 @@
 class User
 {
 public:
-    User(int ID);
+    User(int ID, int Role);
     int getID();
+    int getRole();
     QMultiMap<QString, int> UserIntMap;
 private:
     int ID;
+    int Role;
 };
 
 #endif // USER_H

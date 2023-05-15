@@ -36,6 +36,16 @@ private slots:
 
     void on_GiveBookHomeBtn_clicked();
 
+    void on_GiveTicketHomeBtn_clicked();
+
+    void on_GiveTicketSearchBtn_clicked();
+
+    void on_GiveTicketBookBtn_clicked();
+
+    void on_GiveTicketDelBtn_clicked();
+
+    void on_GiveTicketOkBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     void ClearWidget(QWidget* area);

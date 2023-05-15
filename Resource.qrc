@@ -10,5 +10,9 @@
         <file>res/img/icons/HomeIcon.png</file>
         <file>res/img/icons/OKIcon.png</file>
         <file>res/img/icons/LogInIco.png</file>
+        <file>res/img/icons/AccountIcon.png</file>
+        <file>res/img/icons/BooksIco.png</file>
+        <file>res/img/icons/DelIco.png</file>
+        <file>res/img/icons/BackIco.png</file>
     </qresource>
 </RCC>
