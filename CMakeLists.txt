@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         mainwindow.ui
         pagefunction.cpp
         pagefunction.h
+        user.cpp
+        user.h
         Resource.qrc
 )
 

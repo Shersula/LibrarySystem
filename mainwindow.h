@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QSqlQuery>
-#include "pagefunction.h"
+#include <QCheckBox>
+#include "user.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -30,9 +31,10 @@ private slots:
     void on_LogInBtn_clicked();
 
     void on_Exit_clicked();
-
 private:
     Ui::MainWindow *ui;
-    void ClearWindow(QWidget* area);
+    void ClearWidget(QWidget* area);
+    void ChangePage(QWidget* page);
+    User* TempUser = nullptr;
 };
 #endif // MAINWINDOW_H
