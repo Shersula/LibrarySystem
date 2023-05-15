@@ -176,6 +176,12 @@ QGridLayout* PageFunction::DrowBookCounter(QSqlQuery* query)
     CheckStatus->setAlignment(Qt::AlignCenter);
     MainGrid->addWidget(CheckStatus, row, 3);
 
+    QLabel* ReturnDateTitle = new QLabel;
+    ReturnDateTitle->setText("Дата возврата");
+    ReturnDateTitle->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
+    ReturnDateTitle->setAlignment(Qt::AlignCenter);
+    MainGrid->addWidget(ReturnDateTitle, row, 4);
+
     while (query->next())
     {
         row++;
@@ -205,12 +211,29 @@ QGridLayout* PageFunction::DrowBookCounter(QSqlQuery* query)
         QSpinBox* Counter = new QSpinBox();
         Counter->setAlignment(Qt::AlignCenter);
         Counter->setStyleSheet("QSpinBox{font-family: 'Acme'; font-size: 18px; color: #000000; margin-top: 5px; margin-bottom: 5px; margin-left: 60px; margin-right: 60px;}\
-        QSpinBox::up-button {width: 25; subcontrol-origin: margin; subcontrol-position: center top; bottom: 5px}\
-        QSpinBox::down-button {width: 25; subcontrol-origin: margin; subcontrol-position: center bottom; top: 5px}");
+        QSpinBox::up-button{width: 25; subcontrol-origin: margin; subcontrol-position: center top; bottom: 5px}\
+        QSpinBox::down-button{width: 25; subcontrol-origin: margin; subcontrol-position: center bottom; top: 5px}\
+        QSpinBox::up-button:hover{bottom: 6px;}\
+        QSpinBox::down-button:hover{top: 6px;}\
+        QSpinBox::up-button:pressed{bottom: 5px;}\
+        QSpinBox::down-button:pressed{top: 5px;}");
         Counter->setMinimum(0);
         Counter->setMaximum(BookCount.toInt());
         Counter->setProperty("ID", ID);
         MainGrid->addWidget(Counter, row, 3);
+
+        QDateEdit* ReturnDate = new QDateEdit;
+        ReturnDate->setAlignment(Qt::AlignCenter);
+        ReturnDate->setMinimumDate(QDate::currentDate().addDays(5));
+        ReturnDate->setMaximumDate(QDate::currentDate().addMonths(3));
+        ReturnDate->setStyleSheet("QDateEdit{font-family: 'Acme'; font-size: 18px; color: #000000;}\
+        QDateEdit::up-button{width: 25;}\
+        QDateEdit::down-button{width: 25;}\
+        QDateEdit::up-button:hover{bottom: 1px;}\
+        QDateEdit::down-button:hover{top: 1px;}\
+        QDateEdit::up-button:pressed{bottom: 0px;}\
+        QDateEdit::down-button:pressed{top: 0px;}");
+        MainGrid->addWidget(ReturnDate, row, 4);
     }
 
     return MainGrid;

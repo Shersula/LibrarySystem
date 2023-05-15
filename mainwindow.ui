@@ -173,7 +173,7 @@ color: #000000;
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QLineEdit" name="SearchLine">
+                 <widget class="QLineEdit" name="GiveBookSearchLine">
                   <property name="minimumSize">
                    <size>
                     <width>288</width>
@@ -210,7 +210,7 @@ color: #686060;
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="SearchBtn">
+                 <widget class="QPushButton" name="GiveBookSearchBtn">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
@@ -286,7 +286,7 @@ border: unset;</string>
                  <enum>QLayout::SetMinimumSize</enum>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="HomeBtn">
+                 <widget class="QPushButton" name="GiveBookHomeBtn">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -309,7 +309,7 @@ border: unset;</string>
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">#HomeBtn
+                   <string notr="true">#GiveBookHomeBtn
 {
 	background-color: rgb(135, 156, 207);
 	border-color: rgb(0, 0, 0);
@@ -318,12 +318,12 @@ border: unset;</string>
 	border-radius: 15px;
 }
 
-#HomeBtn:hover
+#GiveBookHomeBtn:hover
 {
 	background-color: rgb(85, 98, 130);
 }
 
-#HomeBtn:pressed
+#GiveBookHomeBtn:pressed
 {
     border: unset;
 }</string>
@@ -360,7 +360,7 @@ border: unset;</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="OkBtn">
+                 <widget class="QPushButton" name="GiveBookOkBtn">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -383,7 +383,7 @@ border: unset;</string>
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">#OkBtn
+                   <string notr="true">#GiveBookOkBtn
 {
 	background-color: rgb(135, 156, 207);
 	border-color: rgb(0, 0, 0);
@@ -392,12 +392,12 @@ border: unset;</string>
 	border-radius: 15px;
 }
 
-#OkBtn:hover
+#GiveBookOkBtn:hover
 {
 	background-color: rgb(85, 98, 130);
 }
 
-#OkBtn:pressed
+#GiveBookOkBtn:pressed
 {
     border: unset;
 }</string>

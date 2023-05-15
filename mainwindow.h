@@ -20,17 +20,22 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_BookGiveBtn_clicked();
 
-    void on_OkBtn_clicked();
-
-    void on_SearchBtn_clicked();
-
-    void on_HomeBtn_clicked();
 
     void on_LogInBtn_clicked();
 
     void on_Exit_clicked();
+
+    void on_BookGiveBtn_clicked();
+
+    void on_TicketGiveBtn_clicked();
+
+    void on_GiveBookSearchBtn_clicked();
+
+    void on_GiveBookOkBtn_clicked();
+
+    void on_GiveBookHomeBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     void ClearWidget(QWidget* area);

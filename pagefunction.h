@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QSpinBox>
 #include <QPushButton>
+#include <QDateEdit>
 
 class PageFunction
 {

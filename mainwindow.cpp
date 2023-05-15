@@ -90,7 +90,7 @@ void MainWindow::on_BookGiveBtn_clicked()
 }
 
 
-void MainWindow::on_OkBtn_clicked()
+void MainWindow::on_GiveBookOkBtn_clicked()
 {
     if(ui->GiveBookPage->property("PageStatus") == 1)
     {
@@ -149,16 +149,18 @@ void MainWindow::on_OkBtn_clicked()
     else if(ui->GiveBookPage->property("PageStatus") == 3)
     {
         QList<QSpinBox*> SpinBoxList = ui->scrollAreaGiveBook->findChildren<QSpinBox*>();
+        QList<QDateEdit*> DateEditList = ui->scrollAreaGiveBook->findChildren<QDateEdit*>();
         QString FinalMessage;
         foreach(QSpinBox* i, SpinBoxList)
         {
             if(i->value() > 0)
             {
                 QSqlQuery query(DB);
-                query.exec(QString("INSERT INTO `studentbook`(`Student`, `Book`, `Count`) VALUES (%1,%2,%3)")
+                query.exec(QString("INSERT INTO `studentbook`(`Student`, `Book`, `Count`, `ReturnDate`) VALUES (%1,%2,%3,%4)")
                                 .arg(TempUser->UserIntMap.value("UserID"))
                                 .arg(i->property("ID").toInt())
-                                .arg(i->value()));
+                                .arg(i->value())
+                                .arg(DateEditList[SpinBoxList.indexOf(i)]->date().toString("yyyyMMdd")));
 
                 query.exec(QString("UPDATE `books` SET `Count` = `Count`-%1 WHERE `ID` = %2")
                                 .arg(i->value())
@@ -167,7 +169,10 @@ void MainWindow::on_OkBtn_clicked()
                 query.exec("SELECT `Name` FROM `books` WHERE `ID` = " + i->property("ID").toString());
                 if(query.next())
                 {
-                    FinalMessage += QString("%1 (%2шт.)\n").arg(query.value("Name").toString()).arg(i->value());
+                    FinalMessage += QString("%1 (%2шт.) до %3\n")
+                                        .arg(query.value("Name").toString())
+                                        .arg(i->value())
+                                        .arg(DateEditList[SpinBoxList.indexOf(i)]->date().toString("dd.MM.yyyy"));
                 }
             }
         }
@@ -193,12 +198,11 @@ void MainWindow::on_OkBtn_clicked()
     }
 }
 
-
-void MainWindow::on_SearchBtn_clicked()
+void MainWindow::on_GiveBookSearchBtn_clicked()
 {
     ClearWidget(ui->scrollAreaGiveBook);
-
-    QString Search = ui->SearchLine->text();
+    
+    QString Search = ui->GiveBookSearchLine->text();
     if(Search.length() == 0)
     {
         QSqlQuery query(DB);
@@ -210,13 +214,18 @@ void MainWindow::on_SearchBtn_clicked()
         QSqlQuery query(DB);
         query.exec("SELECT * FROM books WHERE Name LIKE '"+Search+"%' OR Author LIKE '"+Search+"%'");
         ui->scrollAreaGiveBook->setLayout(PageFunction::DrowBook(&query));
-        ui->SearchLine->setText("");
+        ui->GiveBookSearchLine->setText("");
     }
 
 }
 
-void MainWindow::on_HomeBtn_clicked() {ChangePage(ui->ClearPage);}
+void MainWindow::on_GiveBookHomeBtn_clicked() {ChangePage(ui->ClearPage);}
 ///////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_TicketGiveBtn_clicked()
+{
+
+}
 
 ///////////////////////////////////////////Авторизация////////////////////////////
 void MainWindow::on_LogInBtn_clicked()
@@ -251,4 +260,3 @@ void MainWindow::on_LogInBtn_clicked()
 
 void MainWindow::on_Exit_clicked() {ChangePage(ui->AuthorizedPage);}
 /////////////////////////////////////////////////////////////////////////////////////
-
