@@ -46,6 +46,32 @@ private slots:
 
     void on_GiveTicketOkBtn_clicked();
 
+    void on_CreateTicketBtn_clicked();
+
+    void on_GiveTicketBackBtn_clicked();
+
+    void on_GiveTicketOkBtn_2_clicked();
+
+    void on_AdminCheck_stateChanged(int status);
+
+    void on_GiveTicketChangePswdBtn_clicked();
+
+    void on_BookListBtn_clicked();
+
+    void on_BooksHomeBtn_clicked();
+
+    void on_BooksSearchBtn_clicked();
+
+    void on_BooksAddBtn_clicked();
+
+    void on_AddBookBackBtn_clicked();
+
+    void on_AddBookOkBtn_clicked();
+
+    void on_BooksEditBtn_clicked();
+
+    void on_BooksDelBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     void ClearWidget(QWidget* area);

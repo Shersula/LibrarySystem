@@ -19,10 +19,10 @@ public:
 
     //Список билетов
     static QGridLayout* DrowUsersList(QSqlQuery* query);
-    static QGridLayout* DrowBookList(QSqlQuery* query);
+    static QGridLayout* DrowBookList(QSqlQuery* query, int Role);
 
     //Выдача книг
-    static QGridLayout* DrowBook(QSqlQuery* query);
+    static QGridLayout* DrowBook(QSqlQuery* query, int type = 0);
     static QGridLayout* DrowUsers(QSqlQuery* query);
     static QGridLayout* DrowBookCounter(QSqlQuery* query);
 };

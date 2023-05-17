@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QInputDialog>
 
 QSqlDatabase DB = QSqlDatabase::addDatabase("QMYSQL", "mydb");
 
@@ -42,30 +43,45 @@ void MainWindow::ClearWidget(QWidget* area)
 
 void MainWindow::ChangePage(QWidget* page)
 {
-    if(ui->MainWidget->currentWidget() == ui->GiveBookPage)
+    ////////////////////////////////////////////////////////////Прошлая страница////////////////////////////////////////////////////////////
+    if(ui->MainWidget->currentWidget() == ui->GiveBookPage) ClearWidget(ui->scrollAreaGiveBook);
+    else if(ui->MainWidget->currentWidget() == ui->BooksPage) ClearWidget(ui->scrollAreaBooks);
+    else if(ui->MainWidget->currentWidget() == ui->GiveTicketPage) ClearWidget(ui->scrollAreaGiveTicket);
+    else if(ui->MainWidget->currentWidget() == ui->CreateTicketPage)
     {
-        TempUser->UserIntMap.clear();
-        ClearWidget(ui->scrollAreaGiveBook);
+        ui->TicketNumberInput->setText("");
+        ui->FirstNameInput->setText("");
+        ui->LastNameInput->setText("");
+        ui->MiddleNameInput->setText("");
+        ui->StudNumberInput->setText("");
+        ui->PasswordInput_2->setText("");
+        ui->StudentCheck->setChecked(true);
+        ui->StudNumber->show();
     }
-    else if(ui->MainWidget->currentWidget() == ui->GiveTicketPage)
+    else if(ui->MainWidget->currentWidget() == ui->AddBookPage)
     {
-        ClearWidget(ui->scrollAreaGiveTicket);
+        ui->BookNameInput->setText("");
+        ui->AuthorInput->setText("");
+        ui->BookCountInput->setValue(0);
     }
     else if(ui->MainWidget->currentWidget() == ui->AuthorizedPage)
     {
         ui->Button_Group->show();
-        if(TempUser->getRole() == 0)
+        if(TempUser != nullptr)
         {
-            ui->BookGiveBtn->hide();
-            ui->TicketGiveBtn->hide();
-        }
-        else
-        {
-            ui->BookGiveBtn->show();
-            ui->TicketGiveBtn->show();
+            if(TempUser->getRole() == 0)
+            {
+                ui->BookGiveBtn->hide();
+                ui->TicketGiveBtn->hide();
+            }
+            else
+            {
+                ui->BookGiveBtn->show();
+                ui->TicketGiveBtn->show();
+            }
         }
     }
-
+    ////////////////////////////////////////////////////////////Новая страница////////////////////////////////////////////////////////////
     if(page == ui->ClearPage)
     {
         ui->TitleText->setText("Главная");
@@ -94,19 +110,61 @@ void MainWindow::ChangePage(QWidget* page)
         ui->TicketInput->setInputMask("99-999-999");
         ui->TicketInput->setCursorPosition(0);
     }
+    else if(page == ui->AddBookPage)
+    {
+        ui->TitleText->setText("Добавление книги");
+        ui->MainWidget->setCurrentWidget(ui->AddBookPage);
+    }
     else if(page == ui->GiveTicketPage)
     {
         ui->TitleText->setText("Список билетов");
 
         ui->MainWidget->setCurrentWidget(ui->GiveTicketPage);
 
+        ui->GiveTicketChangePswdBtn->show();
         ui->GiveTicketDelBtn->show();
         ui->GiveTicketBookBtn->show();
+        ui->CreateTicketBtn->show();
         ui->GiveTicketOkBtn->hide();
+        ui->GiveTicketSearchLine->setPlaceholderText("Введите ФИО студента/номер билета");
+
         ui->GiveTicketHomeBtn->setIcon(QIcon(":/res/img/icons/HomeIcon.png"));
         TempUser->UserIntMap.clear();
         ui->GiveTicketPage->setProperty("PageStatus", 1);
     }
+    else if(page == ui->CreateTicketPage)
+    {
+        ui->TitleText->setText("Выдача библиотечного билета");
+
+        ui->TicketNumberInput->setInputMask("99-999-999");
+        ui->TicketNumberInput->setCursorPosition(0);
+
+        ui->StudNumberInput->setInputMask("99-99999");
+
+        ui->MainWidget->setCurrentWidget(ui->CreateTicketPage);
+    }
+    else if(page == ui->BooksPage)
+    {
+        if(TempUser->getRole() == 0)
+        {
+            ui->BooksDelBtn->hide();
+            ui->BooksEditBtn->hide();
+            ui->BooksAddBtn->hide();
+        }
+        else
+        {
+            ui->BooksDelBtn->show();
+            ui->BooksEditBtn->show();
+            ui->BooksAddBtn->show();
+        }
+
+        TempUser->UserIntMap.clear();
+
+        ui->TitleText->setText("Список книг");
+
+        ui->MainWidget->setCurrentWidget(ui->BooksPage);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 //////////////////////////////////Окно выдачи книг/////////////////////////////////////
@@ -223,9 +281,9 @@ void MainWindow::on_GiveBookOkBtn_clicked()
             if(query.next())
             {
                 FinalMessage = QString("Студенту %1 %2 %3 (ID %4) были выданы книги:\n")
+                                   .arg(query.value("LastName").toString())
                                    .arg(query.value("FirstName").toString())
                                    .arg(query.value("MiddleName").toString())
-                                   .arg(query.value("LastName").toString())
                                    .arg(TempUser->UserIntMap.value("UserID")) + FinalMessage;
             }
 
@@ -241,19 +299,13 @@ void MainWindow::on_GiveBookSearchBtn_clicked()
     ClearWidget(ui->scrollAreaGiveBook);
     
     QString Search = ui->GiveBookSearchLine->text();
-    if(Search.length() == 0)
-    {
-        QSqlQuery query(DB);
-        query.exec("SELECT * FROM books");
-        ui->scrollAreaGiveBook->setLayout(PageFunction::DrowBook(&query));
-    }
-    else
-    {
-        QSqlQuery query(DB);
-        query.exec("SELECT * FROM books WHERE Name LIKE '%"+Search+"%' OR Author LIKE '%"+Search+"%'");
-        ui->scrollAreaGiveBook->setLayout(PageFunction::DrowBook(&query));
-        ui->GiveBookSearchLine->setText("");
-    }
+    QSqlQuery query(DB);
+
+    if(Search.length() == 0) query.exec("SELECT * FROM books");
+    else query.exec("SELECT * FROM books WHERE Name LIKE '%"+Search+"%' OR Author LIKE '%"+Search+"%'");
+
+    ui->scrollAreaGiveBook->setLayout(PageFunction::DrowBook(&query));
+    ui->GiveBookSearchLine->setText("");
 }
 
 void MainWindow::on_GiveBookHomeBtn_clicked() {ChangePage(ui->ClearPage);}
@@ -271,6 +323,127 @@ void MainWindow::on_TicketGiveBtn_clicked()
     }
 }
 
+void MainWindow::on_CreateTicketBtn_clicked()
+{
+    if(ui->MainWidget->currentWidget() == ui->GiveTicketPage && ui->GiveTicketPage->property("PageStatus") == 1) ChangePage(ui->CreateTicketPage);
+}
+
+void MainWindow::on_GiveTicketBackBtn_clicked()
+{
+    if(ui->MainWidget->currentWidget() == ui->CreateTicketPage)
+    {
+        ChangePage(ui->GiveTicketPage);
+        QSqlQuery query(DB);
+        query.exec("SELECT * FROM tickets");
+        ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowUsersList(&query));
+    }
+}
+
+void MainWindow::on_GiveTicketOkBtn_2_clicked()
+{
+    if(ui->MainWidget->currentWidget() == ui->CreateTicketPage)
+    {
+        //12-123-123
+        if(ui->TicketNumberInput->text() == "--")
+        {
+            QMessageBox::warning(this, "Предупреждение", "Вы не указали номер библеотечного билета", QMessageBox::Cancel);
+            return void();
+        }
+        else if(ui->TicketNumberInput->text().length() < 10)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Необходимо указать полный номер библеотечного билета", QMessageBox::Cancel);
+            return void();
+        }
+
+        if(ui->FirstNameInput->text().isEmpty() == true)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Вы не указали имя пользователя", QMessageBox::Cancel);
+            return void();
+        }
+
+        if(ui->LastNameInput->text().isEmpty() == true)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Вы не указали фамилию пользователя", QMessageBox::Cancel);
+            return void();
+        }
+
+        if(ui->StudNumberInput->text() == "-" && ui->StudentCheck->isChecked() == true)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Вы не указали номер студенческого билета", QMessageBox::Cancel);
+            return void();
+        }
+        else if(ui->StudNumberInput->text().length() < 8 && ui->StudentCheck->isChecked() == true)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Необходимо указать полный номер студенческого билета", QMessageBox::Cancel);
+            return void();
+        }
+
+        if(ui->PasswordInput_2->text().isEmpty() == true)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Вы не указали пароль для входа", QMessageBox::Cancel);
+            return void();
+        }
+
+        QSqlQuery query(DB);
+        query.exec("SELECT * FROM `tickets` WHERE `TicketNumber` = '" + ui->TicketNumberInput->text() + "'");
+        if(query.next() == true)
+        {
+            QMessageBox::warning(this, "Предупреждение", "Такой номер библеотечного билета уже существует", QMessageBox::Cancel);
+            return void();
+        }
+
+        QString StudNumber;
+        if(ui->StudentCheck->isChecked() == true)
+        {
+            query.exec("SELECT * FROM `tickets` WHERE `StudentIDNumber` = '" + ui->StudNumberInput->text() + "'");
+            if(query.next() == true)
+            {
+                QMessageBox::warning(this, "Предупреждение", "Пользователь с таким студенческим билетом уже существует", QMessageBox::Cancel);
+                return void();
+            }
+
+            StudNumber = ui->StudNumberInput->text();
+        }
+        else StudNumber = "XX-ADMIN";
+
+        query.exec(QString("INSERT INTO `tickets`(`TicketNumber`, `FirstName`, `MiddleName`, `LastName`, `StudentIDNumber`, `Password`, `Role`, `IssueDate`) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', %7, '%8')")
+        .arg(ui->TicketNumberInput->text())
+        .arg(ui->FirstNameInput->text())
+        .arg(ui->MiddleNameInput->text())
+        .arg(ui->LastNameInput->text())
+        .arg(StudNumber)
+        .arg(ui->PasswordInput_2->text())
+        .arg(ui->AdminCheck->isChecked())
+        .arg(QDate::currentDate().toString("yyyyMMdd")));
+
+
+        if(ui->StudentCheck->isChecked() == true) StudNumber = "Студент";
+        else StudNumber = "Администратор";
+
+        QMessageBox::information(this, QString("Билет для %1 %2 %3").arg(ui->LastNameInput->text()).arg(ui->FirstNameInput->text()).arg(ui->MiddleNameInput->text()),
+        QString("Билет для %1 %2 %3 успешно создан\nНомер билета: %5\nРоль: %6\nПароль: %7\n\nДата создания: %8")
+        .arg(ui->LastNameInput->text())
+        .arg(ui->FirstNameInput->text())
+        .arg(ui->MiddleNameInput->text())
+        .arg(ui->TicketNumberInput->text())
+        .arg(StudNumber)
+        .arg(ui->PasswordInput_2->text())
+        .arg(QDate::currentDate().toString("dd.MM.yyyy")));
+
+        ChangePage(ui->CreateTicketPage);
+    }
+}
+
+void MainWindow::on_AdminCheck_stateChanged(int status)
+{
+    if(status == Qt::Checked)
+    {
+        ui->StudNumber->hide();
+        ui->StudNumberInput->setText("");
+    }
+    else ui->StudNumber->show();
+}
+
 void MainWindow::on_GiveTicketDelBtn_clicked()
 {
     QList<QPushButton*> ButtonList = ui->scrollAreaGiveTicket->findChildren<QPushButton*>();
@@ -285,6 +458,14 @@ void MainWindow::on_GiveTicketDelBtn_clicked()
             }
 
             QSqlQuery query(DB);
+
+            query.exec("SELECT * FROM `studentbook` WHERE `Student` = " + i->property("ID").toString());
+            if(query.next() == true)
+            {
+                QMessageBox::warning(this, "Предупреждение", "Вы не можете удалить аккаунт за которым закреплены книги", QMessageBox::Cancel);
+                return void();
+            }
+
             query.exec("DELETE FROM `tickets` WHERE `ID` = " + i->property("ID").toString());
 
             ChangePage(ui->GiveTicketPage);
@@ -298,6 +479,62 @@ void MainWindow::on_GiveTicketDelBtn_clicked()
     return void();
 }
 
+void MainWindow::on_GiveTicketChangePswdBtn_clicked()
+{
+    QList<QPushButton*> ButtonList = ui->scrollAreaGiveTicket->findChildren<QPushButton*>();
+    foreach(QPushButton* i, ButtonList)
+    {
+        if(i->isChecked())
+        {
+            QSqlQuery query(DB);
+
+            query.exec("SELECT `FirstName`, `MiddleName`, `LastName` FROM `tickets` WHERE ID = " + i->property("ID").toString());
+            if(query.next() == true)
+            {
+                while(true)
+                {
+                    QString FirstName = query.value("FirstName").toString();
+                    QString MiddleName = query.value("MiddleName").toString();
+                    QString LastName = query.value("LastName").toString();
+
+                    bool ok;
+                    QString NewPswd = QInputDialog::getText(this, QString("Смена пароля для %1 %2 %3").arg(LastName).arg(FirstName).arg(MiddleName), "Введите новый пароль", QLineEdit::Normal, QString(), &ok);
+
+                    if(ok == false) return void();
+
+                    if(NewPswd.isEmpty() == true)
+                    {
+                        QMessageBox::warning(this, "Предупреждение", "Вы ничего не ввели", QMessageBox::Cancel);
+                        continue;
+                    }
+                    else if(NewPswd.length() > 32)
+                    {
+                        QMessageBox::warning(this, "Предупреждение", "Пароль не должен быть длинее 32 символов", QMessageBox::Cancel);
+                        continue;
+                    }
+                    else
+                    {
+                        query.exec(QString("UPDATE `tickets` SET `Password`= '%1' WHERE `ID` = '%2'").arg(NewPswd).arg(i->property("ID").toString()));
+
+                        QMessageBox::information(this, QString("Билет %1 %2 %3").arg(LastName).arg(FirstName).arg(MiddleName),
+                        QString("Пароль для %1 %2 %3 успешно изменен\n\nНовый пароль: %4")
+                        .arg(LastName)
+                        .arg(FirstName)
+                        .arg(MiddleName)
+                        .arg(NewPswd));
+
+                        break;
+                    }
+                }
+            }
+            return void();
+        }
+    }
+
+    QMessageBox::warning(this, "Предупреждение", "Вы должны выбрать пользователя для которого хотите сменить пароль", QMessageBox::Cancel);
+    return void();
+}
+
 void MainWindow::on_GiveTicketBookBtn_clicked()
 {
     QList<QPushButton*> ButtonList = ui->scrollAreaGiveTicket->findChildren<QPushButton*>();
@@ -306,22 +543,27 @@ void MainWindow::on_GiveTicketBookBtn_clicked()
         if(i->isChecked())
         {
             QSqlQuery query(DB);
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
-            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
-            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
-            WHERE `tickets`.`ID` = '%1'").arg(i->property("ID").toString()));
 
             ui->GiveTicketPage->setProperty("PageStatus", 2);
 
             TempUser->UserIntMap.insert("UserID", i->property("ID").toInt());
 
+            query.exec("SELECT `FirstName`, `MiddleName`, `LastName` FROM `tickets` WHERE ID = " + i->property("ID").toString());
+            if(query.next() == true) ui->TitleText->setText(QString("Книги %1 %2 %3").arg(query.value("LastName").toString()).arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()));
+
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
+            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
+            WHERE `tickets`.`ID` = '%1'").arg(i->property("ID").toString()));
+
             ClearWidget(ui->scrollAreaGiveTicket);
-            ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowBookList(&query));
+            ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowBookList(&query, TempUser->getRole()));
 
-            if(query.last() == true) ui->TitleText->setText(QString("Книги %1 %2 %3").arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()).arg(query.value("LastName").toString()));
-
+            ui->GiveTicketSearchLine->setPlaceholderText("Введите название книги/автора");
+            ui->GiveTicketChangePswdBtn->hide();
             ui->GiveTicketDelBtn->hide();
             ui->GiveTicketBookBtn->hide();
+            ui->CreateTicketBtn->hide();
             ui->GiveTicketOkBtn->show();
             ui->GiveTicketHomeBtn->setIcon(QIcon(":/res/img/icons/BackIco.png"));
             return void();
@@ -346,7 +588,7 @@ void MainWindow::on_GiveTicketOkBtn_clicked()
                 query.exec("SELECT `studentbook`.`Count`, `books`.`Name`, `books`.`ID` AS 'BookID'  FROM `studentbook` INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book` WHERE `studentbook`.`ID` = " + i->property("ID").toString());
                 if(query.next())
                 {
-                    FinalMessage += QString("%1 (%2шт.) были возвращены библиотеке\n")
+                    FinalMessage += QString("%1 (%2шт.) была возвращена библиотеке\n")
                     .arg(query.value("Name").toString())
                     .arg(query.value("Count").toString());
 
@@ -375,7 +617,7 @@ void MainWindow::on_GiveTicketOkBtn_clicked()
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '" + QString::number(TempUser->UserIntMap.value("UserID")) + "'");
-            ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowBookList(&query));
+            ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowBookList(&query, TempUser->getRole()));
         }
     }
 }
@@ -385,17 +627,35 @@ void MainWindow::on_GiveTicketSearchBtn_clicked()
     ClearWidget(ui->scrollAreaGiveTicket);
 
     QString Search = ui->GiveTicketSearchLine->text();
-    if(Search.length() == 0)
+
+    QSqlQuery query(DB);
+
+    if(ui->GiveTicketPage->property("PageStatus") == 1)
     {
-        QSqlQuery query(DB);
-        query.exec("SELECT * FROM tickets");
+        if(Search.length() == 0) query.exec("SELECT * FROM tickets");
+        else query.exec(QString("SELECT * FROM tickets WHERE `TicketNumber` LIKE '%%1%' OR `FirstName` LIKE '%%1%' OR `MiddleName` LIKE '%%1%' OR `LastName` LIKE '%%1%' OR `StudentIDNumber` LIKE '%%1%'").arg(Search));
+
         ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowUsersList(&query));
+        ui->GiveTicketSearchLine->setText("");
     }
-    else
+    else if(ui->GiveTicketPage->property("PageStatus") == 2)
     {
-        QSqlQuery query(DB);
-        query.exec(QString("SELECT * FROM tickets WHERE `TicketNumber` LIKE '%%1%' OR `FirstName` LIKE '%%1%' OR `MiddleName` LIKE '%%1%' OR `LastName` LIKE '%%1%' OR `StudentIDNumber` LIKE '%%1%'").arg(Search));
-        ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowUsersList(&query));
+        if(Search.length() == 0)
+        {
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
+            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
+            WHERE `tickets`.`ID` = '%1'").arg(TempUser->UserIntMap.value("UserID")));
+        }
+        else
+        {
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
+            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
+            WHERE `tickets`.`ID` = '%1' AND (`books`.`Name` LIKE '%%2%' OR `books`.`Author` LIKE '%%2%')").arg(TempUser->UserIntMap.value("UserID")).arg(Search));
+        }
+
+        ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowBookList(&query, TempUser->getRole()));
         ui->GiveTicketSearchLine->setText("");
     }
 }
@@ -411,6 +671,210 @@ void MainWindow::on_GiveTicketHomeBtn_clicked()
         query.exec("SELECT * FROM tickets");
         ui->scrollAreaGiveTicket->setLayout(PageFunction::DrowUsersList(&query));
     }
+}
+///////////////////////////////////////////Меню книг//////////////////////////////////
+
+void MainWindow::on_BookListBtn_clicked()
+{
+    if(ui->MainWidget->currentWidget() == ui->BooksPage) ChangePage(ui->ClearPage);
+    else
+    {
+        ChangePage(ui->BooksPage);
+
+        if(TempUser->getRole() == 0)
+        {
+            QSqlQuery query(DB);
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
+            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
+            WHERE `tickets`.`ID` = '%1'").arg(TempUser->getID()));
+
+            ui->scrollAreaBooks->setLayout(PageFunction::DrowBookList(&query, TempUser->getRole()));
+
+            query.exec(QString("SELECT `FirstName`, `MiddleName`, `LastName` FROM `tickets` WHERE ID = %1").arg(TempUser->getID()));
+            if(query.next() == true) ui->TitleText->setText(QString("Книги %1 %2 %3").arg(query.value("LastName").toString()).arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()));
+        }
+        else
+        {
+            QSqlQuery query(DB);
+            query.exec("SELECT * FROM books");
+            ui->scrollAreaBooks->setLayout(PageFunction::DrowBook(&query, 1));
+        }
+    }
+}
+
+void MainWindow::on_BooksSearchBtn_clicked()
+{
+    ClearWidget(ui->scrollAreaBooks);
+
+    QString Search = ui->BooksSearchLine->text();
+    QSqlQuery query(DB);
+
+    if(TempUser->getRole() == 0)
+    {
+        if(Search.length() == 0)
+        {
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
+            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
+            WHERE `tickets`.`ID` = '%1'").arg(TempUser->getID()));
+        }
+        else
+        {
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
+            INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
+            WHERE `tickets`.`ID` = '%1' AND (`books`.`Name` LIKE '%%2%' OR `books`.`Author` LIKE '%%2%')").arg(TempUser->getID()).arg(Search));
+        }
+
+        ui->scrollAreaBooks->setLayout(PageFunction::DrowBookList(&query, TempUser->getRole()));
+    }
+    else
+    {
+        if(Search.length() == 0) query.exec("SELECT * FROM books");
+        else query.exec("SELECT * FROM books WHERE Name LIKE '%"+Search+"%' OR Author LIKE '%"+Search+"%'");
+
+        ui->scrollAreaBooks->setLayout(PageFunction::DrowBook(&query, 1));
+    }
+    ui->BooksSearchLine->setText("");
+}
+
+void MainWindow::on_BooksHomeBtn_clicked() {ChangePage(ui->ClearPage);}
+
+void MainWindow::on_BooksAddBtn_clicked() {ChangePage(ui->AddBookPage);}
+
+void MainWindow::on_AddBookBackBtn_clicked()
+{
+    ChangePage(ui->BooksPage);
+    QSqlQuery query(DB);
+    query.exec("SELECT * FROM books");
+    ui->scrollAreaBooks->setLayout(PageFunction::DrowBook(&query, 1));
+}
+
+void MainWindow::on_AddBookOkBtn_clicked()
+{
+    if(ui->BookNameInput->text().isEmpty() == true)
+    {
+        QMessageBox::warning(this, "Предупреждение", "Вы не ввели название книги", QMessageBox::Cancel);
+        return void();
+    }
+    else if(ui->AuthorInput->text().isEmpty() == true)
+    {
+        QMessageBox::warning(this, "Предупреждение", "Вы не ввели автора", QMessageBox::Cancel);
+        return void();
+    }
+
+    QSqlQuery query(DB);
+    query.exec(QString("SELECT * FROM books WHERE `Name` = '%1'").arg(ui->BookNameInput->text()));
+
+    if(query.next() == true)
+    {
+        if(TempUser->UserIntMap.contains("BookID") == true)
+        {
+            if(query.value("ID").toInt() != TempUser->UserIntMap.value("BookID"))
+            {
+                QMessageBox::warning(this, "Предупреждение", "Книга с таким названием уже есть в базе данных", QMessageBox::Cancel);
+                return void();
+            }
+        }
+        else
+        {
+            QMessageBox::warning(this, "Предупреждение", "Книга с таким названием уже есть в базе данных", QMessageBox::Cancel);
+            return void();
+        }
+    }
+
+    if(TempUser->UserIntMap.contains("BookID") == true)
+    {
+        query.exec(QString("UPDATE `books` SET `Name` = '%1',`Author` = '%2',`Count` = %3 WHERE `ID` = %4").arg(ui->BookNameInput->text()).arg(ui->AuthorInput->text()).arg(ui->BookCountInput->value()).arg(TempUser->UserIntMap.value("BookID")));
+
+        QMessageBox::information(this, "Книга успешно отредактирована", QString("Книга %1 (%2) в количестве %3шт. успешно отредактирована").arg(ui->BookNameInput->text()).arg(ui->AuthorInput->text()).arg(ui->BookCountInput->value()));
+    }
+    else
+    {
+        query.exec(QString("INSERT INTO `books`(`Name`, `Author`, `Count`) VALUES ('%1','%2',%3)").arg(ui->BookNameInput->text()).arg(ui->AuthorInput->text()).arg(ui->BookCountInput->value()));
+
+        QMessageBox::information(this, "Книга успешно добавлена", QString("Книга %1 (%2) в количестве %3шт. успешно создана").arg(ui->BookNameInput->text()).arg(ui->AuthorInput->text()).arg(ui->BookCountInput->value()));
+    }
+    ChangePage(ui->BooksPage);
+    query.exec("SELECT * FROM books");
+    ui->scrollAreaBooks->setLayout(PageFunction::DrowBook(&query, 1));
+}
+
+void MainWindow::on_BooksEditBtn_clicked()
+{
+    QList<QPushButton*> ButtonList = ui->scrollAreaBooks->findChildren<QPushButton*>();
+    foreach(QPushButton* i, ButtonList)
+    {
+        if(i->isChecked())
+        {
+            QSqlQuery query(DB);
+
+            TempUser->UserIntMap.insert("BookID", i->property("ID").toInt());
+
+            query.exec(QString("SELECT * FROM books WHERE `ID` = %1").arg(i->property("ID").toInt()));
+
+            ChangePage(ui->AddBookPage);
+
+            if(query.next() == true)
+            {
+                ui->BookNameInput->setText(query.value("Name").toString());
+                ui->AuthorInput->setText(query.value("Author").toString());
+                ui->BookCountInput->setValue(query.value("Count").toInt());
+                ui->TitleText->setText(QString("Редактирование книги %1").arg(query.value("Name").toString()));
+            }
+            return void();
+        }
+    }
+
+    QMessageBox::warning(this, "Предупреждение", "Вы не выбрали книгу для редактирования", QMessageBox::Cancel);
+    return void();
+}
+
+void MainWindow::on_BooksDelBtn_clicked()
+{
+    QList<QPushButton*> ButtonList = ui->scrollAreaBooks->findChildren<QPushButton*>();
+    foreach(QPushButton* i, ButtonList)
+    {
+        if(i->isChecked())
+        {
+            QSqlQuery query(DB);
+
+            query.exec(QString("SELECT `studentbook`.*, `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName` FROM `studentbook`\
+            INNER JOIN `tickets` ON `studentbook`.`Student` = `tickets`.`ID` WHERE `Book` = %1").arg(i->property("ID").toInt()));
+
+            QString ErrorMsg;
+            while(query.next())
+            {
+                if(ErrorMsg.isEmpty()) ErrorMsg = "Невозможно удалить данную книгу так как ее не сдали следующие пользователи:\n";
+
+                ErrorMsg += QString("%1 %2 %3 (%4шт.)").arg(query.value("LastName").toString()).arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()).arg(query.value("Count").toString());
+            }
+
+            if(ErrorMsg.isEmpty() == false)
+            {
+                QMessageBox::warning(this, "Невозможно удалить книгу", ErrorMsg, QMessageBox::Cancel);
+                return void();
+            }
+
+            query.exec(QString("SELECT * FROM books WHERE `ID` = %1").arg(i->property("ID").toInt()));
+
+            if(query.next() == true)
+            {
+                QMessageBox::information(this, "Книга успешно удалена", QString("Книга %1 (%2) в количестве %3шт. успешно удалена").arg(query.value("Name").toString()).arg(query.value("Author").toString()).arg(query.value("Count").toInt()));
+            }
+
+            query.exec(QString("DELETE FROM `books` WHERE `ID` = %1").arg(i->property("ID").toInt()));
+
+            ChangePage(ui->BooksPage);
+            query.exec("SELECT * FROM books");
+            ui->scrollAreaBooks->setLayout(PageFunction::DrowBook(&query, 1));
+            return void();
+        }
+    }
+
+    QMessageBox::warning(this, "Предупреждение", "Вы не выбрали книгу для удаления", QMessageBox::Cancel);
+    return void();
 }
 ///////////////////////////////////////////Авторизация////////////////////////////
 void MainWindow::on_LogInBtn_clicked()
@@ -439,7 +903,7 @@ void MainWindow::on_LogInBtn_clicked()
     else
     {
         TempUser = new User(query.value("ID").toInt(), query.value("Role").toInt());
-        ui->AccountText->setText(QString("%1 %2 %3").arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()).arg(query.value("LastName").toString()));
+        ui->AccountText->setText(QString("%1 %2 %3").arg(query.value("LastName").toString()).arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()));
         ChangePage(ui->ClearPage);
     }
 }

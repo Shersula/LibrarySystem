@@ -52,7 +52,7 @@ QGridLayout* PageFunction::DrowUsersList(QSqlQuery* query)
         QString Ticket = query->value("TicketNumber").toString();
         QString StudentTicket = query->value("StudentIDNumber").toString();
         QDate IssueDate = query->value("IssueDate").toDate();
-        QString Name = query->value("FirstName").toString() + " " + query->value("MiddleName").toString() + " " + query->value("LastName").toString();
+        QString Name = query->value("LastName").toString() + " " + query->value("FirstName").toString() + " " + query->value("MiddleName").toString();
 
         QLabel* TicketNumber = new QLabel;
         TicketNumber->setText(Ticket);
@@ -95,7 +95,7 @@ QGridLayout* PageFunction::DrowUsersList(QSqlQuery* query)
     return MainGrid;
 }
 
-QGridLayout* PageFunction::DrowBookList(QSqlQuery* query)
+QGridLayout* PageFunction::DrowBookList(QSqlQuery* query, int Role)
 {
     int row = 0;
 
@@ -129,11 +129,14 @@ QGridLayout* PageFunction::DrowBookList(QSqlQuery* query)
     ReturnDateTitle->setAlignment(Qt::AlignCenter);
     MainGrid->addWidget(ReturnDateTitle, row, 3);
 
-    QLabel* ReturnStatusTitle = new QLabel;
-    ReturnStatusTitle->setText("Возврат");
-    ReturnStatusTitle->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
-    ReturnStatusTitle->setAlignment(Qt::AlignCenter);
-    MainGrid->addWidget(ReturnStatusTitle, row, 4);
+    if(Role == 1)
+    {
+        QLabel* ReturnStatusTitle = new QLabel;
+        ReturnStatusTitle->setText("Возврат");
+        ReturnStatusTitle->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
+        ReturnStatusTitle->setAlignment(Qt::AlignCenter);
+        MainGrid->addWidget(ReturnStatusTitle, row, 4);
+    }
 
     while (query->next())
     {
@@ -176,14 +179,19 @@ QGridLayout* PageFunction::DrowBookList(QSqlQuery* query)
         Date->setAlignment(Qt::AlignCenter);
         MainGrid->addWidget(Date, row, 3);
 
-        QWidget* StatusWidget = new QWidget;
-        QHBoxLayout* StatusBox = new QHBoxLayout();
-        StatusBox->setAlignment(Qt::AlignCenter);
-        StatusWidget->setLayout(StatusBox);
-        QCheckBox* Status = new QCheckBox;
-        StatusBox->addWidget(Status);
-        Status->setProperty("ID", ID);
-        MainGrid->addWidget(StatusWidget, row, 4);
+        if(Role == 1)
+        {
+            QWidget* StatusWidget = new QWidget;
+            QHBoxLayout* StatusBox = new QHBoxLayout();
+            StatusBox->setAlignment(Qt::AlignCenter);
+            StatusWidget->setLayout(StatusBox);
+            QCheckBox* Status = new QCheckBox;
+            Status->setStyleSheet("QCheckBox::indicator{border:unset; background: #98A3BE; border-radius: 5px;}\
+            QCheckBox::indicator:checked{border:solid; background: #98A3BE; border-width: 2px; border-radius: 5px;}");
+            StatusBox->addWidget(Status);
+            Status->setProperty("ID", ID);
+            MainGrid->addWidget(StatusWidget, row, 4);
+        }
     }
 
     return MainGrid;
@@ -223,7 +231,7 @@ QGridLayout* PageFunction::DrowUsers(QSqlQuery* query)
         row++;
         int ID = query->value("ID").toInt();
         QString Ticket = query->value("TicketNumber").toString();
-        QString Name = query->value("FirstName").toString() + " " + query->value("MiddleName").toString() + " " + query->value("LastName").toString();
+        QString Name = query->value("LastName").toString() + " " + query->value("FirstName").toString() + " " + query->value("MiddleName").toString();
 
         QLabel* TicketNumber = new QLabel;
         TicketNumber->setText(Ticket);
@@ -254,7 +262,7 @@ QGridLayout* PageFunction::DrowUsers(QSqlQuery* query)
     return MainGrid;
 }
 
-QGridLayout* PageFunction::DrowBook(QSqlQuery* query)
+QGridLayout* PageFunction::DrowBook(QSqlQuery* query, int type)
 {
     int row = 0;
 
@@ -314,14 +322,34 @@ QGridLayout* PageFunction::DrowBook(QSqlQuery* query)
         Count->setAlignment(Qt::AlignCenter);
         MainGrid->addWidget(Count, row, 2);
 
-        QWidget* StatusWidget = new QWidget;
-        QHBoxLayout* StatusBox = new QHBoxLayout();
-        StatusBox->setAlignment(Qt::AlignCenter);
-        StatusWidget->setLayout(StatusBox);
-        QCheckBox* Status = new QCheckBox;
-        StatusBox->addWidget(Status);
-        Status->setProperty("ID", ID);
-        MainGrid->addWidget(StatusWidget, row, 3);
+        if(type == 0)
+        {
+            QWidget* StatusWidget = new QWidget;
+            QHBoxLayout* StatusBox = new QHBoxLayout();
+            StatusBox->setAlignment(Qt::AlignCenter);
+            StatusWidget->setLayout(StatusBox);
+            QCheckBox* Status = new QCheckBox;
+            Status->setStyleSheet("QCheckBox::indicator{border:unset; background: #98A3BE; border-radius: 5px;}\
+            QCheckBox::indicator:checked{border:solid; background: #98A3BE; border-width: 2px; border-radius: 5px;}");
+            StatusBox->addWidget(Status);
+            Status->setProperty("ID", ID);
+            MainGrid->addWidget(StatusWidget, row, 3);
+        }
+        else
+        {
+            QPushButton* Status = new QPushButton();
+            Status->setCheckable(true);
+            Status->setAutoExclusive(true);
+            Status->setMaximumSize(100, 20);
+            Status->setCursor(Qt::PointingHandCursor);
+            Status->setText("Выбрать");
+            Status->setStyleSheet("QPushButton{background-color: rgb(135, 156, 207); border-color: rgb(0, 0, 0); border: solid; border-width: 2px; border-radius: 15px;}\
+            QPushButton:hover{background-color: rgb(85, 98, 130);}\
+            QPushButton:pressed{border: unset;}\
+            QPushButton:checked{border: unset; background-color: rgb(85, 98, 130);}");
+            Status->setProperty("ID", ID);
+            MainGrid->addWidget(Status, row, 3);
+        }
     }
 
     return MainGrid;

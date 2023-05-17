@@ -14,5 +14,11 @@
         <file>res/img/icons/BooksIco.png</file>
         <file>res/img/icons/DelIco.png</file>
         <file>res/img/icons/BackIco.png</file>
+        <file>res/img/icons/PlusIco.png</file>
+        <file>res/sqldriver/libcrypto-1_1-x64.dll</file>
+        <file>res/sqldriver/libmysql.dll</file>
+        <file>res/sqldriver/libssl-1_1-x64.dll</file>
+        <file>res/img/icons/PasswordIco.png</file>
+        <file>res/img/icons/EditIco.png</file>
     </qresource>
 </RCC>
