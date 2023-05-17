@@ -72,6 +72,10 @@ private slots:
 
     void on_BooksDelBtn_clicked();
 
+    void on_InfoBtn_clicked();
+
+    void on_InfoHomeBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     void ClearWidget(QWidget* area);

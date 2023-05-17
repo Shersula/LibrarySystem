@@ -164,6 +164,20 @@ void MainWindow::ChangePage(QWidget* page)
 
         ui->MainWidget->setCurrentWidget(ui->BooksPage);
     }
+    else if(page == ui->InfoPage)
+    {
+        ui->TitleText->setText("Справка");
+        ui->MainWidget->setCurrentWidget(ui->InfoPage);
+
+        if(TempUser->getRole() == 1)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
@@ -876,6 +890,14 @@ void MainWindow::on_BooksDelBtn_clicked()
     QMessageBox::warning(this, "Предупреждение", "Вы не выбрали книгу для удаления", QMessageBox::Cancel);
     return void();
 }
+///////////////////////////////////////////Информация////////////////////////////
+void MainWindow::on_InfoBtn_clicked()
+{
+    if(ui->MainWidget->currentWidget() == ui->InfoPage) ChangePage(ui->ClearPage);
+    else ChangePage(ui->InfoPage);
+}
+
+void MainWindow::on_InfoHomeBtn_clicked() {ChangePage(ui->ClearPage);}
 ///////////////////////////////////////////Авторизация////////////////////////////
 void MainWindow::on_LogInBtn_clicked()
 {

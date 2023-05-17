@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>868</width>
-    <height>527</height>
+    <height>534</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -128,14 +128,14 @@ color: #000000;
        <item>
         <widget class="QStackedWidget" name="MainWidget">
          <property name="styleSheet">
-          <string notr="true">#AuthorizedPage, #GiveBookPage, #ClearPage, #GiveTicketPage, #CreateTicketPage, #BooksPage, #AddBookPage
+          <string notr="true">#AuthorizedPage, #GiveBookPage, #ClearPage, #GiveTicketPage, #CreateTicketPage, #BooksPage, #AddBookPage, #InfoPage
 {
 	background-color: rgba(255, 255, 255, 0);	
 	border-image: url(:/res/img/bg.png);
 }</string>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="AuthorizedPage">
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1961,6 +1961,161 @@ border: unset;</string>
                    </size>
                   </property>
                  </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="InfoPage">
+          <layout class="QVBoxLayout" name="verticalLayout_29">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QWidget" name="MainSubWindow_6" native="true">
+             <property name="styleSheet">
+              <string notr="true">#MainSubWindow_6
+{
+	background-color: rgb(223, 237, 255);
+	border-radius: 15px;
+}</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_28">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="InfoBox" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_18">
+                 <item>
+                  <widget class="QLabel" name="InfoLabel">
+                   <property name="styleSheet">
+                    <string notr="true">font-family: 'Acme';
+color: #000000;</string>
+                   </property>
+                   <property name="text">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:700;&quot;&gt;Информация&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Это пример информации&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>500</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="Sub_Button_Group_6">
+                <property name="spacing">
+                 <number>5</number>
+                </property>
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetMinimumSize</enum>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="InfoHomeBtn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>52</width>
+                    <height>52</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>52</width>
+                    <height>52</height>
+                   </size>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">#InfoHomeBtn
+{
+	background-color: rgb(135, 156, 207);
+	border-color: rgb(0, 0, 0);
+	border: solid;
+	border-width: 2px;
+	border-radius: 15px;
+}
+
+#InfoHomeBtn:hover
+{
+	background-color: rgb(85, 98, 130);
+}
+
+#InfoHomeBtn:pressed
+{
+    border: unset;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="Resource.qrc">
+                    <normaloff>:/res/img/icons/HomeIcon.png</normaloff>:/res/img/icons/HomeIcon.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_37">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>10</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
