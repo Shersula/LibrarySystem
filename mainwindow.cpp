@@ -30,6 +30,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::keyPressEvent(QKeyEvent* e)
+{
+    if(ui->MainWidget->currentWidget() == ui->AuthorizedPage && e->key() == Qt::Key_Return) on_LogInBtn_clicked();
+}
+
 void MainWindow::ClearWidget(QWidget* area)
 {
     if(area->layout() != nullptr) delete area->layout();
@@ -73,11 +78,13 @@ void MainWindow::ChangePage(QWidget* page)
             {
                 ui->BookGiveBtn->hide();
                 ui->TicketGiveBtn->hide();
+                ui->BookListBtn->setToolTip("<html><head/><body><p>Список книг</p></body></html>");
             }
             else
             {
                 ui->BookGiveBtn->show();
                 ui->TicketGiveBtn->show();
+                ui->BookListBtn->setToolTip("<html><head/><body><p>Управление книгами</p></body></html>");
             }
         }
     }
@@ -171,11 +178,26 @@ void MainWindow::ChangePage(QWidget* page)
 
         if(TempUser->getRole() == 1)
         {
-
+            ui->InfoLabel->setText("<html><head/><body>\
+            <p align=\"center\"><span style=\" font-size:18pt; font-weight:700;\">Информация(Администратор)</span></p>\
+            <p><span style=\" font-size:12pt;\">Данное приложение предоставляет возможность взаимодействие с электронной базой библиотеки.\
+            <br/><br/>Роль Администратор позволяет выполнять следующие действия:\
+            <br/>-Выдача книг на электронный библиотечный билет студента<br/>\
+            -Возврат книг закрепленных за студентом<br/>\
+            -Просмотр сроков ворзврата и книг закрепленных за студентом<br/><br/>\
+            -Создание электронного библиотечного билета для студента<br/>\
+            -Удаление электронного библиотечного билета<br/>\
+            -Смена пароля от электронного библиотечного билета<br/><br/>\
+            -Добавление новыйх книг в информационную базу библиотеки<br/>\
+            -Редактирование данных о уже добавленных книгах<br/>\
+            -Удаление записей о добавленых книгах</span></p></body></html>");
         }
         else
         {
-
+            ui->InfoLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:18pt; font-weight:700;\">Информация(Студент)</span></p>\
+            <p><span style=\" font-size:12pt;\">Данное приложение предоставляет возможность взаимодействие с электронной базой библиотеки.<br/><br/>\
+            Роль Студент позволяет просматривать срок возврата и список книг закрепленных за вами.<br/><br/></span>\
+            <span style=\" font-size:12pt; font-weight:700; color:#ff0000;\">В случае утери доступа к аккаунту обратитесь к администрации библиотеки для<br/>восстановления.</span></p></body></html> ");
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

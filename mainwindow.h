@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSqlQuery>
 #include <QCheckBox>
+#include <QKeyEvent>
 #include "user.h"
 
 
@@ -20,7 +21,7 @@ public:
     ~MainWindow();
 
 private slots:
-
+    void keyPressEvent(QKeyEvent* e);
 
     void on_LogInBtn_clicked();
 
