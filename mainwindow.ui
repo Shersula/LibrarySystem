@@ -135,7 +135,7 @@ color: #000000;
 }</string>
          </property>
          <property name="currentIndex">
-          <number>6</number>
+          <number>7</number>
          </property>
          <widget class="QWidget" name="AuthorizedPage">
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -926,7 +926,7 @@ border: unset;</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>751</width>
+                   <width>73</width>
                    <height>280</height>
                   </rect>
                  </property>
@@ -1210,7 +1210,7 @@ border: unset;</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>751</width>
+                   <width>73</width>
                    <height>280</height>
                   </rect>
                  </property>
@@ -3926,7 +3926,7 @@ color: #000000;
                        <string notr="true">#StudentCheck
 {
 	font-family: 'Acme';
-	font-size: 20px;
+	font-size: 15px;
 	color: #000000;
 }
 
@@ -3957,6 +3957,39 @@ color: #000000;
                      </widget>
                     </item>
                     <item>
+                     <widget class="QCheckBox" name="TeacherCheck">
+                      <property name="styleSheet">
+                       <string notr="true">#TeacherCheck
+{
+	font-family: 'Acme';
+	font-size: 15px;
+	color: #000000;
+}
+
+#TeacherCheck::indicator
+{
+	border:unset;
+	background: #98A3BE;
+	border-radius: 5px;
+}
+
+#TeacherCheck::indicator:checked 
+{
+	border:solid;
+	background: #98A3BE;
+	border-width: 2px;
+	border-radius: 5px;
+}</string>
+                      </property>
+                      <property name="text">
+                       <string>Преподователь</string>
+                      </property>
+                      <property name="autoExclusive">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
                      <widget class="QCheckBox" name="AdminCheck">
                       <property name="toolTip">
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Держатель билета является администратором.&lt;br/&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Доступные функции:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;- Выдача книг на пользователей&lt;br/&gt;&lt;br/&gt;- Создание/Удаление билетов&lt;br/&gt;&lt;br/&gt;- Просмотр книг закрепленных за пользователем и их возврат&lt;/p&gt;&lt;p&gt;- Создание/Добавление/Удаление книг из базы&lt;/p&gt;&lt;p&gt;- Просмотр справки&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -3965,7 +3998,7 @@ color: #000000;
                        <string notr="true">#AdminCheck
 {
 	font-family: 'Acme';
-	font-size: 20px;
+	font-size: 15px;
 	color: #000000;
 }
 

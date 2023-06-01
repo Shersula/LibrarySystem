@@ -74,7 +74,7 @@ void MainWindow::ChangePage(QWidget* page)
         ui->Button_Group->show();
         if(TempUser != nullptr)
         {
-            if(TempUser->getRole() == 0)
+            if(TempUser->getRole() == 0 || TempUser->getRole() == 2)
             {
                 ui->BookGiveBtn->hide();
                 ui->TicketGiveBtn->hide();
@@ -152,7 +152,7 @@ void MainWindow::ChangePage(QWidget* page)
     }
     else if(page == ui->BooksPage)
     {
-        if(TempUser->getRole() == 0)
+        if(TempUser->getRole() == 0 || TempUser->getRole() == 2)
         {
             ui->BooksDelBtn->hide();
             ui->BooksEditBtn->hide();
@@ -192,11 +192,18 @@ void MainWindow::ChangePage(QWidget* page)
             -Редактирование данных о уже добавленных книгах<br/>\
             -Удаление записей о добавленых книгах</span></p></body></html>");
         }
-        else
+        else if(TempUser->getRole() == 0)
         {
             ui->InfoLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:18pt; font-weight:700;\">Информация(Студент)</span></p>\
             <p><span style=\" font-size:12pt;\">Данное приложение предоставляет возможность взаимодействие с электронной базой библиотеки.<br/><br/>\
             Роль Студент позволяет просматривать срок возврата и список книг закрепленных за вами.<br/><br/></span>\
+            <span style=\" font-size:12pt; font-weight:700; color:#ff0000;\">В случае утери доступа к аккаунту обратитесь к администрации библиотеки для<br/>восстановления.</span></p></body></html> ");
+        }
+        else if(TempUser->getRole() == 2)
+        {
+            ui->InfoLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:18pt; font-weight:700;\">Информация(Преподаватель)</span></p>\
+            <p><span style=\" font-size:12pt;\">Данное приложение предоставляет возможность взаимодействие с электронной базой библиотеки.<br/><br/>\
+            Роль Преподаватель позволяет просматривать список книг закрепленных за вами.<br/><br/></span>\
             <span style=\" font-size:12pt; font-weight:700; color:#ff0000;\">В случае утери доступа к аккаунту обратитесь к администрации библиотеки для<br/>восстановления.</span></p></body></html> ");
         }
     }
@@ -250,6 +257,7 @@ void MainWindow::on_GiveBookOkBtn_clicked()
             if(i->isChecked())
             {
                 TempUser->UserIntMap.insert("UserID", i->property("ID").toInt());
+                TempUser->UserIntMap.insert("UserRole", i->property("Role").toInt());
                 break;
             }
         }
@@ -273,7 +281,7 @@ void MainWindow::on_GiveBookOkBtn_clicked()
         TempUser->UserIntMap.remove("BookID");
 
         query.exec(queryStr);
-        ui->scrollAreaGiveBook->setLayout(PageFunction::DrowBookCounter(&query));
+        ui->scrollAreaGiveBook->setLayout(PageFunction::DrowBookCounter(&query, TempUser->UserIntMap.value("UserRole")));
 
         ui->TitleText->setText("Выдача книги [3/3]");
         ui->GiveBookPage->setProperty("PageStatus", 3);
@@ -292,7 +300,7 @@ void MainWindow::on_GiveBookOkBtn_clicked()
                                 .arg(TempUser->UserIntMap.value("UserID"))
                                 .arg(i->property("ID").toInt())
                                 .arg(i->value())
-                                .arg(DateEditList[SpinBoxList.indexOf(i)]->date().toString("yyyyMMdd")));
+                                .arg(TempUser->UserIntMap.value("UserRole") == 0 ? DateEditList[SpinBoxList.indexOf(i)]->date().toString("yyyyMMdd") : "00000000"));
 
                 query.exec(QString("UPDATE `books` SET `Count` = `Count`-%1 WHERE `ID` = %2")
                                 .arg(i->value())
@@ -304,7 +312,7 @@ void MainWindow::on_GiveBookOkBtn_clicked()
                     FinalMessage += QString("%1 (%2шт.) до %3\n")
                                         .arg(query.value("Name").toString())
                                         .arg(i->value())
-                                        .arg(DateEditList[SpinBoxList.indexOf(i)]->date().toString("dd.MM.yyyy"));
+                                        .arg(TempUser->UserIntMap.value("UserRole") == 0 ? DateEditList[SpinBoxList.indexOf(i)]->date().toString("dd.MM.yyyy") : "Бессрочно");
                 }
             }
         }
@@ -316,7 +324,13 @@ void MainWindow::on_GiveBookOkBtn_clicked()
             query.exec("SELECT `FirstName`, `MiddleName`, `LastName` FROM `tickets` WHERE `ID` = " + QString::number(TempUser->UserIntMap.value("UserID")));
             if(query.next())
             {
-                FinalMessage = QString("Студенту %1 %2 %3 (ID %4) были выданы книги:\n")
+                QString RoleName;
+                if(TempUser->UserIntMap.value("UserRole") == 0) RoleName = "Студенту";
+                else if(TempUser->UserIntMap.value("UserRole") == 2) RoleName = "Преподавателю";
+                else RoleName = "Администратору";
+
+                FinalMessage = QString("%1 %2 %3 %4 (ID %5) были выданы книги:\n")
+                                   .arg(RoleName)
                                    .arg(query.value("LastName").toString())
                                    .arg(query.value("FirstName").toString())
                                    .arg(query.value("MiddleName").toString())
@@ -429,6 +443,7 @@ void MainWindow::on_GiveTicketOkBtn_2_clicked()
         }
 
         QString StudNumber;
+        int Role;
         if(ui->StudentCheck->isChecked() == true)
         {
             query.exec("SELECT * FROM `tickets` WHERE `StudentIDNumber` = '" + ui->StudNumberInput->text() + "'");
@@ -439,9 +454,18 @@ void MainWindow::on_GiveTicketOkBtn_2_clicked()
             }
 
             StudNumber = ui->StudNumberInput->text();
+            Role = 0;
         }
-        else StudNumber = "XX-ADMIN";
-
+        else if(ui->AdminCheck->isChecked())
+        {
+            StudNumber = "XX-ADMIN";
+            Role = 1;
+        }
+        else
+        {
+            StudNumber = "TEACHER";
+            Role = 2;
+        }
         query.exec(QString("INSERT INTO `tickets`(`TicketNumber`, `FirstName`, `MiddleName`, `LastName`, `StudentIDNumber`, `Password`, `Role`, `IssueDate`) VALUES ('%1', '%2', '%3', '%4', '%5', '%6', %7, '%8')")
         .arg(ui->TicketNumberInput->text())
         .arg(ui->FirstNameInput->text())
@@ -449,12 +473,13 @@ void MainWindow::on_GiveTicketOkBtn_2_clicked()
         .arg(ui->LastNameInput->text())
         .arg(StudNumber)
         .arg(ui->PasswordInput_2->text())
-        .arg(ui->AdminCheck->isChecked())
+        .arg(Role)
         .arg(QDate::currentDate().toString("yyyyMMdd")));
 
 
-        if(ui->StudentCheck->isChecked() == true) StudNumber = "Студент";
-        else StudNumber = "Администратор";
+        if(Role == 0) StudNumber = "Студент";
+        else if(Role == 1) StudNumber = "Администратор";
+        else if(Role == 2) StudNumber = "Преподаватель";
 
         QMessageBox::information(this, QString("Билет для %1 %2 %3").arg(ui->LastNameInput->text()).arg(ui->FirstNameInput->text()).arg(ui->MiddleNameInput->text()),
         QString("Билет для %1 %2 %3 успешно создан\nНомер билета: %5\nРоль: %6\nПароль: %7\n\nДата создания: %8")
@@ -477,7 +502,20 @@ void MainWindow::on_AdminCheck_stateChanged(int status)
         ui->StudNumber->hide();
         ui->StudNumberInput->setText("");
     }
-    else ui->StudNumber->show();
+}
+
+void MainWindow::on_TeacherCheck_stateChanged(int status)
+{
+    if(status == Qt::Checked)
+    {
+        ui->StudNumber->hide();
+        ui->StudNumberInput->setText("");
+    }
+}
+
+void MainWindow::on_StudentCheck_stateChanged(int status)
+{
+    if(status == Qt::Checked)  ui->StudNumber->show();
 }
 
 void MainWindow::on_GiveTicketDelBtn_clicked()
@@ -587,7 +625,7 @@ void MainWindow::on_GiveTicketBookBtn_clicked()
             query.exec("SELECT `FirstName`, `MiddleName`, `LastName` FROM `tickets` WHERE ID = " + i->property("ID").toString());
             if(query.next() == true) ui->TitleText->setText(QString("Книги %1 %2 %3").arg(query.value("LastName").toString()).arg(query.value("FirstName").toString()).arg(query.value("MiddleName").toString()));
 
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '%1'").arg(i->property("ID").toString()));
@@ -649,7 +687,7 @@ void MainWindow::on_GiveTicketOkBtn_clicked()
             ClearWidget(ui->scrollAreaGiveTicket);
 
             QSqlQuery query(DB);
-            query.exec("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '" + QString::number(TempUser->UserIntMap.value("UserID")) + "'");
@@ -678,14 +716,14 @@ void MainWindow::on_GiveTicketSearchBtn_clicked()
     {
         if(Search.length() == 0)
         {
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '%1'").arg(TempUser->UserIntMap.value("UserID")));
         }
         else
         {
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '%1' AND (`books`.`Name` LIKE '%%2%' OR `books`.`Author` LIKE '%%2%')").arg(TempUser->UserIntMap.value("UserID")).arg(Search));
@@ -717,10 +755,10 @@ void MainWindow::on_BookListBtn_clicked()
     {
         ChangePage(ui->BooksPage);
 
-        if(TempUser->getRole() == 0)
+        if(TempUser->getRole() == 0 || TempUser->getRole() == 2)
         {
             QSqlQuery query(DB);
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '%1'").arg(TempUser->getID()));
@@ -746,18 +784,18 @@ void MainWindow::on_BooksSearchBtn_clicked()
     QString Search = ui->BooksSearchLine->text();
     QSqlQuery query(DB);
 
-    if(TempUser->getRole() == 0)
+    if(TempUser->getRole() == 0 || TempUser->getRole() == 2)
     {
         if(Search.length() == 0)
         {
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '%1'").arg(TempUser->getID()));
         }
         else
         {
-            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
+            query.exec(QString("SELECT `tickets`.`FirstName`, `tickets`.`MiddleName`, `tickets`.`LastName`, `tickets`.`Role`, `studentbook`.`ID`, `studentbook`.`ReturnDate`, `studentbook`.`Count`, `books`.`Name`, `books`.`Author` FROM `tickets`\
             INNER JOIN `studentbook` ON `tickets`.`ID` = `studentbook`.`Student`\
             INNER JOIN `books` ON `books`.`ID` = `studentbook`.`Book`\
             WHERE `tickets`.`ID` = '%1' AND (`books`.`Name` LIKE '%%2%' OR `books`.`Author` LIKE '%%2%')").arg(TempUser->getID()).arg(Search));

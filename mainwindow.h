@@ -77,6 +77,10 @@ private slots:
 
     void on_InfoHomeBtn_clicked();
 
+    void on_TeacherCheck_stateChanged(int arg1);
+
+    void on_StudentCheck_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     void ClearWidget(QWidget* area);

@@ -142,6 +142,7 @@ QGridLayout* PageFunction::DrowBookList(QSqlQuery* query, int Role)
     {
         row++;
         int ID = query->value("ID").toInt();
+        int UserRole = query->value("Role").toInt();
         QString BookCount = query->value("Count").toString();
         QString Name = query->value("Name").toString();
         QString Author = query->value("Author").toString();
@@ -166,14 +167,22 @@ QGridLayout* PageFunction::DrowBookList(QSqlQuery* query, int Role)
         MainGrid->addWidget(Count, row, 2);
 
         QLabel* Date = new QLabel;
-        if(IssueDate < QDate::currentDate())
+        if(UserRole == 0)
         {
-            Date->setText(IssueDate.toString("dd.MM.yyyy") + " (Просрочено)");
-            Date->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #ff0000;");
+            if(IssueDate < QDate::currentDate())
+            {
+                Date->setText(IssueDate.toString("dd.MM.yyyy") + " (Просрочено)");
+                Date->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #ff0000;");
+            }
+            else
+            {
+                Date->setText(IssueDate.toString("dd.MM.yyyy"));
+                Date->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
+            }
         }
         else
         {
-            Date->setText(IssueDate.toString("dd.MM.yyyy"));
+            Date->setText("Бессрочно");
             Date->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
         }
         Date->setAlignment(Qt::AlignCenter);
@@ -230,6 +239,7 @@ QGridLayout* PageFunction::DrowUsers(QSqlQuery* query)
     {
         row++;
         int ID = query->value("ID").toInt();
+        int Role = query->value("Role").toInt();
         QString Ticket = query->value("TicketNumber").toString();
         QString Name = query->value("LastName").toString() + " " + query->value("FirstName").toString() + " " + query->value("MiddleName").toString();
 
@@ -256,6 +266,7 @@ QGridLayout* PageFunction::DrowUsers(QSqlQuery* query)
         QPushButton:pressed{border: unset;}\
         QPushButton:checked{border: unset; background-color: rgb(85, 98, 130);}");
         Status->setProperty("ID", ID);
+        Status->setProperty("Role", Role);
         MainGrid->addWidget(Status, row, 2);
     }
 
@@ -355,7 +366,7 @@ QGridLayout* PageFunction::DrowBook(QSqlQuery* query, int type)
     return MainGrid;
 }
 
-QGridLayout* PageFunction::DrowBookCounter(QSqlQuery* query)
+QGridLayout* PageFunction::DrowBookCounter(QSqlQuery* query, int Role)
 {
     int row = 0;
 
@@ -389,11 +400,14 @@ QGridLayout* PageFunction::DrowBookCounter(QSqlQuery* query)
     CheckStatus->setAlignment(Qt::AlignCenter);
     MainGrid->addWidget(CheckStatus, row, 3);
 
-    QLabel* ReturnDateTitle = new QLabel;
-    ReturnDateTitle->setText("Дата возврата");
-    ReturnDateTitle->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
-    ReturnDateTitle->setAlignment(Qt::AlignCenter);
-    MainGrid->addWidget(ReturnDateTitle, row, 4);
+    if(Role == 0)
+    {
+        QLabel* ReturnDateTitle = new QLabel;
+        ReturnDateTitle->setText("Дата возврата");
+        ReturnDateTitle->setStyleSheet("font-family: 'Acme'; font-size: 18px; color: #000000;");
+        ReturnDateTitle->setAlignment(Qt::AlignCenter);
+        MainGrid->addWidget(ReturnDateTitle, row, 4);
+    }
 
     while (query->next())
     {
@@ -435,18 +449,21 @@ QGridLayout* PageFunction::DrowBookCounter(QSqlQuery* query)
         Counter->setProperty("ID", ID);
         MainGrid->addWidget(Counter, row, 3);
 
-        QDateEdit* ReturnDate = new QDateEdit;
-        ReturnDate->setAlignment(Qt::AlignCenter);
-        ReturnDate->setMinimumDate(QDate::currentDate().addDays(5));
-        ReturnDate->setMaximumDate(QDate::currentDate().addMonths(3));
-        ReturnDate->setStyleSheet("QDateEdit{font-family: 'Acme'; font-size: 18px; color: #000000;}\
-        QDateEdit::up-button{width: 25;}\
-        QDateEdit::down-button{width: 25;}\
-        QDateEdit::up-button:hover{bottom: 1px;}\
-        QDateEdit::down-button:hover{top: 1px;}\
-        QDateEdit::up-button:pressed{bottom: 0px;}\
-        QDateEdit::down-button:pressed{top: 0px;}");
-        MainGrid->addWidget(ReturnDate, row, 4);
+        if(Role == 0)
+        {
+            QDateEdit* ReturnDate = new QDateEdit;
+            ReturnDate->setAlignment(Qt::AlignCenter);
+            ReturnDate->setMinimumDate(QDate::currentDate().addDays(5));
+            ReturnDate->setMaximumDate(QDate::currentDate().addMonths(3));
+            ReturnDate->setStyleSheet("QDateEdit{font-family: 'Acme'; font-size: 18px; color: #000000;}\
+            QDateEdit::up-button{width: 25;}\
+            QDateEdit::down-button{width: 25;}\
+            QDateEdit::up-button:hover{bottom: 1px;}\
+            QDateEdit::down-button:hover{top: 1px;}\
+            QDateEdit::up-button:pressed{bottom: 0px;}\
+            QDateEdit::down-button:pressed{top: 0px;}");
+            MainGrid->addWidget(ReturnDate, row, 4);
+        }
     }
 
     return MainGrid;

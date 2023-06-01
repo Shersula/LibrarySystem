@@ -24,7 +24,7 @@ public:
     //Выдача книг
     static QGridLayout* DrowBook(QSqlQuery* query, int type = 0);
     static QGridLayout* DrowUsers(QSqlQuery* query);
-    static QGridLayout* DrowBookCounter(QSqlQuery* query);
+    static QGridLayout* DrowBookCounter(QSqlQuery* query, int Role);
 };
 
 #endif // PAGEFUNCTION_H
